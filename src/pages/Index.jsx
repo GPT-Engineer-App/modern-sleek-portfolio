@@ -1,7 +1,7 @@
-import { Container, Box, VStack, Text, Heading, Image, IconButton, HStack, useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { Container, Box, VStack, Text, Heading, Image, IconButton, HStack, useColorMode, useColorModeValue, Link } from "@chakra-ui/react";
 import { FaSun, FaMoon, FaLinkedin, FaGithub, FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const MotionBox = motion(Box);
 
@@ -14,14 +14,23 @@ const Index = () => {
     setSelected(index === selected ? null : index);
   };
 
-  const projects = [
-    { title: "Modern Villa", description: "A luxurious modern villa with an open floor plan and stunning views.", image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MDcxMzJ8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjB2aWxsYXxlbnwwfHx8fDE3MTU3NDQ4NDF8MA&ixlib=rb-4.0.3&q=80&w=1080" },
-    { title: "Urban Apartment", description: "A sleek urban apartment designed for comfort and style.", image: "https://images.unsplash.com/photo-1668584054035-f5ba7d426401?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MDcxMzJ8MHwxfHNlYXJjaHwxfHx1cmJhbiUyMGFwYXJ0bWVudHxlbnwwfHx8fDE3MTU3NDQ4NDJ8MA&ixlib=rb-4.0.3&q=80&w=1080" },
-    { title: "Office Space", description: "A tech-savvy office space with innovative design elements.", image: "https://images.unsplash.com/photo-1497215842964-222b430dc094?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MDcxMzJ8MHwxfHNlYXJjaHwxfHxvZmZpY2UlMjBzcGFjZXxlbnwwfHx8fDE3MTU3NDQ4NDJ8MA&ixlib=rb-4.0.3&q=80&w=1080" },
-  ];
+  const projects = Array.from({ length: 12 }, (_, i) => ({
+    title: `Project ${i + 1}`,
+    description: `Description for project ${i + 1}`,
+    image: `https://via.placeholder.com/150?text=Project+${i + 1}`,
+  }));
+
+  useEffect(() => {
+    const shapes = document.querySelectorAll(".shape");
+    shapes.forEach((shape) => {
+      shape.addEventListener("click", () => {
+        shape.style.transform = `translate(${Math.random() * 100}px, ${Math.random() * 100}px)`;
+      });
+    });
+  }, []);
 
   return (
-    <Container maxW="container.xl" p={4}>
+    <Container maxW="container.2xl" p={8} position="relative">
       <HStack justifyContent="space-between" mb={8}>
         <Heading as="h1" size="lg">
           Architectural & Interior Design Portfolio
@@ -29,18 +38,24 @@ const Index = () => {
         <IconButton aria-label="Toggle color mode" icon={colorModeIcon} onClick={toggleColorMode} />
       </HStack>
 
-      <VStack spacing={8}>
+      <Box className="shape" position="absolute" top="10%" left="10%" width="100px" height="100px" bg="rgba(255, 255, 255, 0.2)" borderRadius="50%" backdropFilter="blur(10px)" zIndex="-1"></Box>
+      <Box className="shape" position="absolute" top="30%" left="50%" width="150px" height="150px" bg="rgba(255, 255, 255, 0.2)" borderRadius="50%" backdropFilter="blur(10px)" zIndex="-1"></Box>
+      <Box className="shape" position="absolute" top="50%" left="80%" width="200px" height="200px" bg="rgba(255, 255, 255, 0.2)" borderRadius="50%" backdropFilter="blur(10px)" zIndex="-1"></Box>
+
+      <VStack spacing={12}>
         {projects.map((project, index) => (
           <MotionBox key={index} p={5} shadow="md" borderWidth="1px" borderRadius="md" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => handleSelect(index)} bg={selected === index ? "teal.500" : "white"} color={selected === index ? "white" : "black"} cursor="pointer" width="100%">
-            <HStack spacing={4}>
-              <Image src={project.image} alt={project.title} boxSize="100px" objectFit="cover" borderRadius="md" />
-              <VStack align="start">
-                <Heading as="h3" size="md">
-                  {project.title}
-                </Heading>
-                <Text>{project.description}</Text>
-              </VStack>
-            </HStack>
+            <Link href={`/project/${index + 1}`} width="100%">
+              <HStack spacing={4}>
+                <Image src={project.image} alt={project.title} boxSize="100px" objectFit="cover" borderRadius="md" />
+                <VStack align="start">
+                  <Heading as="h3" size="md">
+                    {project.title}
+                  </Heading>
+                  <Text>{project.description}</Text>
+                </VStack>
+              </HStack>
+            </Link>
           </MotionBox>
         ))}
       </VStack>
