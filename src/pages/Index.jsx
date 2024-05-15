@@ -8,6 +8,8 @@ const MotionBox = motion(Box);
 const Index = () => {
   const { toggleColorMode } = useColorMode();
   const colorModeIcon = useColorModeValue(<FaMoon />, <FaSun />);
+  const containerBg = useColorModeValue("white", "gray.700");
+  const containerColor = useColorModeValue("black", "white");
   const [selected, setSelected] = useState(null);
 
   const handleSelect = (index) => {
@@ -44,7 +46,7 @@ const Index = () => {
 
       <VStack spacing={12}>
         {projects.map((project, index) => (
-          <MotionBox key={index} p={5} shadow="md" borderWidth="1px" borderRadius="md" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => handleSelect(index)} bg={selected === index ? "teal.500" : "white"} color={selected === index ? "white" : "black"} cursor="pointer" width="100%">
+          <MotionBox key={index} p={5} shadow="md" borderWidth="1px" borderRadius="md" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => handleSelect(index)} bg={selected === index ? "teal.500" : containerBg} color={selected === index ? "white" : containerColor} cursor="pointer" width="100%">
             <Link href={`/project/${index + 1}`} width="100%">
               <HStack spacing={4}>
                 <Image src={project.image} alt={project.title} boxSize="100px" objectFit="cover" borderRadius="md" />
